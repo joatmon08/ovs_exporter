@@ -2,18 +2,19 @@ package utils
 
 import (
 	"testing"
+	"reflect"
 )
 
 type test struct {
 	Foo string
 	Bar int
-	Hi  map[string]string
+	Hi  string
 }
 
 type smallOvs struct {
 	capabilities string
 	Bar int
-	Hi  map[string]string
+	Hi  string
 }
 
 func (t *test) Fill(m map[string]interface{}) error {
@@ -44,22 +45,18 @@ func TestGetField(t *testing.T) {
 func TestMapStringToInterface(t *testing.T) {
 	t.Log("Testing mapping of a string to an interface")
 	testString := "ignoreme: yes\n" +
-		"Foo: hello\n" +
-		"Bar: 0\n" +
+		"foo: hello\n" +
+		"bar: 20\n" +
 		"alsoignoreme: yes\n" +
-		"Hi: {foo:bar}"
+		"hi: world"
+	expectedTestStruct := map[string]interface{}{
+		"Foo": "hello",
+		"Bar": 20,
+		"Hi": "world",
+	}
 	result := MapStringToInterface(test{}, testString)
-	if len(result) != 3 {
-		t.Errorf("Expected %d, got %d for length", 3, len(result))
-	}
-	if _, exists := result["Bar"]; !exists {
-		t.Errorf("Expected %s but doesn't exist", "Bar")
-	}
-	if _, exists := result["Foo"]; !exists {
-		t.Errorf("Expected %s but doesn't exist", "Foo")
-	}
-	if _, exists := result["alsoignoreme"]; exists {
-		t.Errorf("Expected %s not to exist but it is there", "alsoignoreme")
+	if reflect.DeepEqual(result, expectedTestStruct) {
+		t.Errorf("Expected %v, got %v", expectedTestStruct, result)
 	}
 }
 
@@ -80,19 +77,19 @@ func TestFillStructure(t *testing.T) {
 	testInterface := map[string]interface{}{
 		"Foo": "bar",
 		"Bar": 50,
-		"Hi": map[string]string{
-			"test":"this",
-			"that":"works",
-		},
+		"Hi": "test",
 	}
-	testStructure.Fill(testInterface)
+	if err := testStructure.Fill(testInterface); err != nil {
+		t.Error(err)
+	}
 	if testStructure.Bar != 50 {
 		t.Errorf("Expected %d for %s, got %d", 50, "Bar", testStructure.Bar)
 	}
 	if testStructure.Foo != "bar" {
 		t.Errorf("Expected %s for %s, got %s", "bar", "Foo", testStructure.Foo)
 	}
-	if len(testStructure.Hi) != 2 {
-		t.Errorf("Expected %d for %s, got %d", 2, "Hi", testStructure.Hi)
+	if testStructure.Hi != "test" {
+		t.Errorf("Expected %s for %s, got %s", "test", "Hi", testStructure.Hi)
 	}
+
 }
