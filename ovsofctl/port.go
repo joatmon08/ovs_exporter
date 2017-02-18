@@ -20,10 +20,11 @@ type OvsPort struct {
 
 func getSpeeds(data interface{}) (int, int, error) {
 	var err error
+	var ok bool
+	var speedInfo string
 	now := 0
 	max := 0
-	speedInfo, ok := data.(string)
-	if !ok {
+	if speedInfo, ok = data.(string); !ok {
 		return 0, 0, errors.New("speed is not string type")
 	}
 	speeds := regexp.MustCompile(`([0-9].*?)Mbps`).FindAllStringSubmatch(speedInfo, -1)
@@ -63,7 +64,7 @@ func GetPort(portInfo string) (*OvsPort, error) {
 	header := strings.Split(portInfo, "\n")[0]
 	id := regexp.MustCompile(`[A-Z0-9]+`).FindStringSubmatch(header)[0]
 	name := regexp.MustCompile(`\((.*?)\)`).FindStringSubmatch(header)[1]
-	logrus.Infof("bridge: id %s, name %s", id, name)
+	logrus.Infof("ovs-ofctl show switch : filling port : id %s, name %s", id, name)
 	port := &OvsPort{
 		ID: id,
 		Name: name,

@@ -2,19 +2,13 @@ package ovsofctl
 
 import (
 	"testing"
-	"io/ioutil"
+	"github.com/joatmon08/ovs_exporter/utils"
 )
 
-func readTestData(filename string) (string, error) {
-	file, err := ioutil.ReadFile("testdata/" + filename)
-	if err != nil {
-		return "", err
-	}
-	return string(file), nil
-}
+
 
 func TestGetPort(t *testing.T) {
-	testPortInfo, err := readTestData("port")
+	testPortInfo, err := utils.ReadTestData("port")
 	if err != nil {
 		t.Error(err)
 	}

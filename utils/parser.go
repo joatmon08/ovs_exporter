@@ -29,11 +29,11 @@ func MapStringToInterface(expectedStruct interface{}, input string) (map[string]
 		re := regexp.MustCompile(strings.ToLower(field) + ":")
 		for _, line := range lines {
 			matchedIndices := re.FindStringIndex(line)
-			logrus.Infof("re %s, matched %d", re, matchedIndices)
+			logrus.Debugf("match expression %s matched indices %d", re, matchedIndices)
 			if len(matchedIndices) < 2 {
 				continue
 			} else {
-				logrus.Debugf("Adding %s:%s", field, line[matchedIndices[1]:])
+				logrus.Debugf("adding field %s:%s", field, line[matchedIndices[1]:])
 				structure[field] = strings.TrimSpace(line[matchedIndices[1]:])
 			}
 		}
@@ -62,4 +62,3 @@ func SetField(obj interface{}, name string, value interface{}) error {
 	structFieldValue.Set(val)
 	return nil
 }
-
