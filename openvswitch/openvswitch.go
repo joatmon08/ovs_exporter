@@ -1,21 +1,25 @@
 package openvswitch
 
-import "github.com/socketplane/libovsdb"
+import (
+	"github.com/socketplane/libovsdb"
+	"github.com/Sirupsen/logrus"
+)
 
 func CheckHealth(o *libovsdb.OvsdbClient) ([]string, error) {
 	return o.ListDbs()
 }
 
-func GetTotalBridges(o *libovsdb.OvsdbClient) int {
+func GetTotalFromTable(o *libovsdb.OvsdbClient, table string) []map[string]interface{} {
+	rows := []map[string]interface{}{}
 	op := libovsdb.Operation{
 		Op:        "select",
-		Table:     "Open_vSwitch",
+		Table:     table,
 		Where:     []interface{}{},
 	}
 	reply, _ := o.Transact("Open_vSwitch", op)
+	logrus.Debugf("Reply from OVSDB, %v", reply)
 	for _, r := range reply {
-		return r.Count
+		return r.Rows
 	}
-	return 0
+	return rows
 }
-

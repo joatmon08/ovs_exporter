@@ -29,6 +29,11 @@ var (
 		"How many Open vSwitch bridges on this node.",
 		nil, nil,
 	)
+	interfaces = prometheus.NewDesc(
+		prometheus.BuildFQName(namespace, "", "interfaces_total"),
+		"How many Open vSwitch interfaces on this node.",
+		nil, nil,
+	)
 )
 
 type Exporter struct {
@@ -37,6 +42,7 @@ type Exporter struct {
 	up         *prometheus.Desc
 	dbs        *prometheus.Desc
 	bridges    *prometheus.Desc
+	interfaces *prometheus.Desc
 }
 
 func NewExporter(uri string) (*Exporter, error) {
@@ -50,6 +56,7 @@ func NewExporter(uri string) (*Exporter, error) {
 		dbs: dbs,
 		client: client,
 		bridges: bridges,
+		interfaces: interfaces,
 	}, nil
 }
 
@@ -57,6 +64,7 @@ func (e *Exporter) Describe(ch chan <- *prometheus.Desc) {
 	ch <- up
 	ch <- dbs
 	ch <- bridges
+	ch <- interfaces
 }
 
 func (e *Exporter) Collect(ch chan <- prometheus.Metric) {
@@ -74,9 +82,13 @@ func (e *Exporter) Collect(ch chan <- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(
 		dbs, prometheus.GaugeValue, float64(len(databases)),
 	)
-	total_bridges := openvswitch.GetTotalBridges(e.client)
+	total_bridges := openvswitch.GetTotalFromTable(e.client, "Bridge")
 	ch <- prometheus.MustNewConstMetric(
-		bridges, prometheus.GaugeValue, float64(total_bridges),
+		bridges, prometheus.GaugeValue, float64(len(total_bridges)),
+	)
+	total_interfaces := openvswitch.GetTotalFromTable(e.client, "Interface")
+	ch <- prometheus.MustNewConstMetric(
+		interfaces, prometheus.GaugeValue, float64(len(total_interfaces)),
 	)
 }
 
