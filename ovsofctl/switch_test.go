@@ -11,7 +11,7 @@ func TestGetSwitch(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	sw, err := GetSwitch(testSwitchInfo)
+	sw, err := GetSwitchDetails(testSwitchInfo)
 	if err != nil {
 		t.Error(err)
 	}

@@ -85,7 +85,7 @@ func (o *OpenvSwitch) Fill(m map[string]interface{}) error {
 	return nil
 }
 
-func GetSwitch(switchInfo string) (*OpenvSwitch, error) {
+func GetSwitchDetails(switchInfo string) (*OpenvSwitch, error) {
 	logrus.Infof("ovs-ofctl show switch")
 	sw := &OpenvSwitch{}
 	switchInterface := utils.MapStringToInterface(*sw, switchInfo)
