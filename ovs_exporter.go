@@ -118,6 +118,9 @@ func (e *Exporter) collectInterfacesStats(rows []map[string]interface{}) {
 
 func (e *Exporter) connect(network string) error {
 	network, err := openvswitch.GenerateNetworkAndHealthCheck(e.URI)
+	if err != nil {
+		return err
+	}
 	e.client, err = libovsdb.ConnectUsingProtocol(network, e.URI)
 	return err
 }
@@ -132,21 +135,14 @@ func (e *Exporter) Collect(ch chan <- prometheus.Metric) {
 		)
 		return
 	}
-
-	databases, err := openvswitch.CheckHealth(e.client)
-	if err != nil {
-		ch <- prometheus.MustNewConstMetric(
-			up, prometheus.GaugeValue, 0,
-		)
-		logrus.WithFields(logrus.Fields{
-			"event": "cannot get dbs from ovs",
-		}).Error("ovsdb connection error")
-		return
-	}
 	ch <- prometheus.MustNewConstMetric(
 		up, prometheus.GaugeValue, 1,
 	)
 
+	databases, err := openvswitch.GetDatabases(e.client)
+	if err != nil {
+		logrus.Error(err)
+	}
 	ch <- prometheus.MustNewConstMetric(
 		dbs, prometheus.GaugeValue, float64(len(databases)),
 	)

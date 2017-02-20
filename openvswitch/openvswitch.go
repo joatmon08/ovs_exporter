@@ -29,8 +29,12 @@ type Interface struct {
 	Statistics map[string]float64
 }
 
-func CheckHealth(o *libovsdb.OvsdbClient) ([]string, error) {
-	return o.ListDbs()
+func GetDatabases(o *libovsdb.OvsdbClient) ([]string, error) {
+	dbs, err := o.ListDbs()
+	if err != nil {
+		return []string{}, err
+	}
+	return dbs, nil
 }
 
 func ParsePortsFromBridges(rows []map[string]interface{}) ([]Bridge, error) {

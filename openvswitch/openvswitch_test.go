@@ -18,7 +18,7 @@ func setup(t *testing.T) *libovsdb.OvsdbClient {
 
 func TestCheckHealth(t *testing.T) {
 	client := setup(t)
-	dbs, err := CheckHealth(client)
+	dbs, err := GetDatabases(client)
 	if err != nil {
 		t.Error(err)
 	}
