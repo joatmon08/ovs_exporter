@@ -8,26 +8,50 @@ import (
 
 const STATISTICS = "statistics"
 const NAME = "name"
+const UUID = "_uuid"
+
+type Bridge struct {
+	Name  string
+	Ports []Port
+}
+
+type Port struct {
+	UUID string
+	Name string
+	Interfaces []Interface
+}
+
+type Interface struct {
+	UUID string
+	Name string
+	Statistics map[string]float64
+}
 
 func CheckHealth(o *libovsdb.OvsdbClient) ([]string, error) {
 	return o.ListDbs()
 }
 
-func ParseStatisticsFromData(rows []map[string]interface{}) (map[string]map[string]float64, error) {
-	result := map[string]map[string]float64{}
+func ParseStatisticsFromInterfaces(rows []map[string]interface{}) ([]Interface, error) {
+	result := []Interface{}
 	for _, row := range rows {
+		uuid := row[UUID].([]interface{})[1].(string)
 		name := row[NAME].(string)
 		fieldDetails := row[STATISTICS].([]interface{})
 		if fieldDetails[0].(string) != "map" {
 			return nil, errors.New("field " + STATISTICS + " in OVSDB is not of map type")
 		}
 		info := fieldDetails[1].([]interface{})
-		entryMap := map[string]float64{}
+		statMap := map[string]float64{}
 		for _, entry := range info {
 			e := entry.([]interface{})
-			entryMap[e[0].(string)] = e[1].(float64)
+			statMap[e[0].(string)] = e[1].(float64)
 		}
-		result[name] = entryMap
+		iface := Interface{
+			UUID: uuid,
+			Name: name,
+			Statistics: statMap,
+		}
+		result = append(result, iface)
 	}
 	return result, nil
 }

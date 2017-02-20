@@ -92,15 +92,16 @@ func (e *Exporter) Describe(ch chan <- *prometheus.Desc) {
 
 func (e *Exporter) collectInterfacesStats(rows []map[string]interface{}) {
 	e.interfaces_stats.Reset()
-	interfaces, err := openvswitch.ParseStatisticsFromData(rows)
+	interfaces, err := openvswitch.ParseStatisticsFromInterfaces(rows)
 	if err != nil {
 		{
 			return
 		}
 	}
-	for name, statistics := range interfaces {
-		for stat_name, num := range statistics {
-			e.interfaces_stats.WithLabelValues(name, stat_name).Add(num)
+	for _, iface := range interfaces {
+		for stat_name, num := range iface.Statistics {
+			e.interfaces_stats.WithLabelValues(iface.Name, stat_name).Add(num)
+			e.interfaces_stats.WithLabelValues(iface.Name, stat_name).Add(num)
 		}
 	}
 }

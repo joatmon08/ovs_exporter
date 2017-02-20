@@ -62,14 +62,21 @@ func TestParseStatisticsFromData(t *testing.T) {
 	if err := json.Unmarshal(stats, &test); err != nil {
 		t.Error(err)
 	}
-	result, err := ParseStatisticsFromData(test)
+	result, err := ParseStatisticsFromInterfaces(test)
 	if err != nil {
 		t.Error(err)
 	}
 	if len(result) != 6 {
 		t.Errorf("Expected %d, got %d", 6, len(result))
 	}
-	if reflect.DeepEqual(result["1c1988eb903b4_l"], expected) {
-		t.Errorf("Expected %v, got %v", expected, result["1c1988eb903b4_l"])
+	for _, r := range result {
+		if r.Name == "1c1988eb903b4_l" {
+			if r.UUID != "aa713415-8566-458b-b8ef-58e550af8a91" {
+				t.Errorf("Expected %s, got %s", "aa713415-8566-458b-b8ef-58e550af8a91", r.UUID)
+			}
+			if reflect.DeepEqual(r.Statistics, expected) {
+				t.Errorf("Expected %v, got %v", expected, r.Statistics)
+			}
+		}
 	}
 }

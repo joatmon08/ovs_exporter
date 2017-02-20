@@ -1,0 +1,255 @@
+[
+  {
+    "_uuid": [
+      "uuid",
+      "77c7ab01-49e0-4071-99f1-f09251599c13"
+    ],
+    "_version": [
+      "uuid",
+      "af382800-af58-4cdd-9a0e-f0f793b6263c"
+    ],
+    "auto_attach": [
+      "set",
+      []
+    ],
+    "controller": [
+      "set",
+      []
+    ],
+    "datapath_id": "000002abc7777140",
+    "datapath_type": "",
+    "datapath_version": "<unknown>",
+    "external_ids": [
+      "map",
+      []
+    ],
+    "fail_mode": [
+      "set",
+      []
+    ],
+    "flood_vlans": [
+      "set",
+      []
+    ],
+    "flow_tables": [
+      "map",
+      []
+    ],
+    "ipfix": [
+      "set",
+      []
+    ],
+    "mcast_snooping_enable": false,
+    "mirrors": [
+      "set",
+      []
+    ],
+    "name": "ovs-br1",
+    "netflow": [
+      "set",
+      []
+    ],
+    "other_config": [
+      "map",
+      []
+    ],
+    "ports": [
+      "set",
+      [
+        [
+          "uuid",
+          "5ac4abb8-e9dd-4cd5-ad4b-e54426012e30"
+        ],
+        [
+          "uuid",
+          "d0f48d2f-8cf5-4034-a6b1-547b8597a0a7"
+        ],
+        [
+          "uuid",
+          "ff34b74c-f247-4968-9ece-d0ff0174d81b"
+        ]
+      ]
+    ],
+    "protocols": [
+      "set",
+      []
+    ],
+    "rstp_enable": false,
+    "rstp_status": [
+      "map",
+      []
+    ],
+    "sflow": [
+      "set",
+      []
+    ],
+    "status": [
+      "map",
+      []
+    ],
+    "stp_enable": false
+  },
+  {
+    "_uuid": [
+      "uuid",
+      "a8abca0a-6101-40fe-bbc6-da77def5f35b"
+    ],
+    "_version": [
+      "uuid",
+      "240c4d79-f996-4f84-b0fe-1fcdaa3a64b9"
+    ],
+    "auto_attach": [
+      "set",
+      []
+    ],
+    "controller": [
+      "set",
+      []
+    ],
+    "datapath_id": "00000acaaba8fe40",
+    "datapath_type": "",
+    "datapath_version": "<unknown>",
+    "external_ids": [
+      "map",
+      []
+    ],
+    "fail_mode": [
+      "set",
+      []
+    ],
+    "flood_vlans": [
+      "set",
+      []
+    ],
+    "flow_tables": [
+      "map",
+      []
+    ],
+    "ipfix": [
+      "set",
+      []
+    ],
+    "mcast_snooping_enable": false,
+    "mirrors": [
+      "set",
+      []
+    ],
+    "name": "ovs-br2",
+    "netflow": [
+      "set",
+      []
+    ],
+    "other_config": [
+      "map",
+      []
+    ],
+    "ports": [
+      "uuid",
+      "5d277ad5-0670-4d69-8522-3d2bdc65b01d"
+    ],
+    "protocols": [
+      "set",
+      []
+    ],
+    "rstp_enable": false,
+    "rstp_status": [
+      "map",
+      []
+    ],
+    "sflow": [
+      "set",
+      []
+    ],
+    "status": [
+      "map",
+      []
+    ],
+    "stp_enable": false
+  },
+  {
+    "_uuid": [
+      "uuid",
+      "77a4dbd1-299d-4d17-af83-6fe0ad02faa8"
+    ],
+    "_version": [
+      "uuid",
+      "72239768-a94c-4a5f-8d45-7e9089d53ad4"
+    ],
+    "auto_attach": [
+      "set",
+      []
+    ],
+    "controller": [
+      "set",
+      []
+    ],
+    "datapath_id": "0000d2dba477174d",
+    "datapath_type": "",
+    "datapath_version": "<unknown>",
+    "external_ids": [
+      "map",
+      []
+    ],
+    "fail_mode": [
+      "set",
+      []
+    ],
+    "flood_vlans": [
+      "set",
+      []
+    ],
+    "flow_tables": [
+      "map",
+      []
+    ],
+    "ipfix": [
+      "set",
+      []
+    ],
+    "mcast_snooping_enable": false,
+    "mirrors": [
+      "set",
+      []
+    ],
+    "name": "ovsbr0",
+    "netflow": [
+      "set",
+      []
+    ],
+    "other_config": [
+      "map",
+      []
+    ],
+    "ports": [
+      "set",
+      [
+        [
+          "uuid",
+          "a5956ae0-25fd-46b2-a881-a6f63c8014d9"
+        ],
+        [
+          "uuid",
+          "dfb05de8-617b-4127-91aa-e1f3bfd7ab60"
+        ]
+      ]
+    ],
+    "protocols": [
+      "set",
+      []
+    ],
+    "rstp_enable": false,
+    "rstp_status": [
+      "map",
+      []
+    ],
+    "sflow": [
+      "set",
+      []
+    ],
+    "status": [
+      "map",
+      []
+    ],
+    "stp_enable": false
+  }
+]
