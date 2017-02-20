@@ -3,14 +3,12 @@ package openvswitch
 import (
 	"github.com/socketplane/libovsdb"
 	"testing"
-	"github.com/Sirupsen/logrus"
 	"github.com/joatmon08/ovs_exporter/utils"
 	"encoding/json"
 	"reflect"
 )
 
 func setup(t *testing.T) *libovsdb.OvsdbClient {
-	logrus.SetLevel(logrus.DebugLevel)
 	client, err := libovsdb.Connect("127.0.0.1", 6640)
 	if err != nil {
 		t.Error(err)
@@ -21,7 +19,6 @@ func setup(t *testing.T) *libovsdb.OvsdbClient {
 func TestCheckHealth(t *testing.T) {
 	client := setup(t)
 	dbs, err := CheckHealth(client)
-	t.Log(dbs)
 	if err != nil {
 		t.Error(err)
 	}
@@ -33,7 +30,6 @@ func TestCheckHealth(t *testing.T) {
 func TestGetTotalFromTable(t *testing.T) {
 	client := setup(t)
 	rows := GetRowsFromTable(client, "Bridge")
-	t.Log(rows)
 	if len(rows) != 0 {
 		t.Errorf("Expected %d, got %d", 0, len(rows))
 	}
@@ -76,6 +72,38 @@ func TestParseStatisticsFromData(t *testing.T) {
 			}
 			if reflect.DeepEqual(r.Statistics, expected) {
 				t.Errorf("Expected %v, got %v", expected, r.Statistics)
+			}
+		}
+	}
+}
+
+func TestParsePortsFromBridges(t *testing.T) {
+	var test []map[string]interface{}
+	expected := Bridge{
+		Name: "ovsbr0",
+		Ports: []Port{
+			{UUID: "a5956ae0-25fd-46b2-a881-a6f63c8014d9"},
+			{UUID: "dfb05de8-617b-4127-91aa-e1f3bfd7ab60"},
+		},
+	}
+	stats, err := utils.ReadTestDataToBytes("bridges.json")
+	if err != nil {
+		t.Error(err)
+	}
+	if err := json.Unmarshal(stats, &test); err != nil {
+		t.Error(err)
+	}
+	result, err := ParsePortsFromBridges(test)
+	if err != nil {
+		t.Error(err)
+	}
+	if len(result) != 3 {
+		t.Errorf("Expected %d, got %d", 3, len(result))
+	}
+	for _, r := range result {
+		if r.Name == "ovsbr0" {
+			if !reflect.DeepEqual(expected, r) {
+				t.Errorf("Expected %v, got %v", expected, r)
 			}
 		}
 	}

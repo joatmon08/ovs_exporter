@@ -36,6 +36,13 @@ var (
 		"How many Open vSwitch interfaces on this node.",
 		nil, nil,
 	)
+	bridges_num_ports = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Namespace: namespace,
+		Name:      "bridges_num_ports",
+		Help:      "Number of ports attached to bridges",
+	},
+		[]string{"name"},
+	)
 	interfaces_stats = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Namespace: namespace,
 		Name:      "interfaces",
@@ -52,6 +59,7 @@ type Exporter struct {
 	dbs              *prometheus.Desc
 	bridges          *prometheus.Desc
 	interfaces       *prometheus.Desc
+	bridges_num_ports    *prometheus.GaugeVec
 	interfaces_stats *prometheus.CounterVec
 }
 
@@ -78,6 +86,7 @@ func NewExporter(uri string) (*Exporter, error) {
 		client: client,
 		bridges: bridges,
 		interfaces: interfaces,
+		bridges_num_ports: bridges_num_ports,
 		interfaces_stats: interfaces_stats,
 	}, nil
 }
@@ -87,16 +96,26 @@ func (e *Exporter) Describe(ch chan <- *prometheus.Desc) {
 	ch <- dbs
 	ch <- bridges
 	ch <- interfaces
+	e.bridges_num_ports.Describe(ch)
 	e.interfaces_stats.Describe(ch)
+}
+
+func (e *Exporter) collectPortsForBridges(rows []map[string]interface{}) {
+	e.bridges_num_ports.Reset()
+	bridges, err := openvswitch.ParsePortsFromBridges(rows)
+	if err != nil {
+		return
+	}
+	for _, bridge := range bridges {
+		e.bridges_num_ports.WithLabelValues(bridge.Name).Set(float64(len(bridge.Ports)))
+	}
 }
 
 func (e *Exporter) collectInterfacesStats(rows []map[string]interface{}) {
 	e.interfaces_stats.Reset()
 	interfaces, err := openvswitch.ParseStatisticsFromInterfaces(rows)
 	if err != nil {
-		{
-			return
-		}
+		return
 	}
 	for _, iface := range interfaces {
 		for stat_name, num := range iface.Statistics {
@@ -129,6 +148,8 @@ func (e *Exporter) Collect(ch chan <- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(
 		interfaces, prometheus.GaugeValue, float64(len(total_interfaces)),
 	)
+	e.collectPortsForBridges(total_bridges)
+	e.bridges_num_ports.Collect(ch)
 	e.collectInterfacesStats(total_interfaces)
 	e.interfaces_stats.Collect(ch)
 }

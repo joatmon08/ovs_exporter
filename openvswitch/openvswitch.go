@@ -9,6 +9,7 @@ import (
 const STATISTICS = "statistics"
 const NAME = "name"
 const UUID = "_uuid"
+const PORTS = "ports"
 
 type Bridge struct {
 	Name  string
@@ -29,6 +30,29 @@ type Interface struct {
 
 func CheckHealth(o *libovsdb.OvsdbClient) ([]string, error) {
 	return o.ListDbs()
+}
+
+func ParsePortsFromBridges(rows []map[string]interface{}) ([]Bridge, error) {
+	result := []Bridge{}
+	for _, row := range rows {
+		name := row[NAME].(string)
+		fieldDetails := row[PORTS].([]interface{})
+		ports := []Port{}
+		if fieldDetails[0].(string) == "set" {
+			info := fieldDetails[1].([]interface{})
+			for _, entry := range info {
+				e := entry.([]interface{})
+				port := Port{UUID: e[1].(string)}
+				ports = append(ports, port)
+			}
+		} else {
+			uuid := fieldDetails[1].(string)
+			port := Port{UUID: uuid}
+			ports = append(ports, port)
+		}
+		result = append(result, Bridge{Name:name, Ports:ports})
+	}
+	return result, nil
 }
 
 func ParseStatisticsFromInterfaces(rows []map[string]interface{}) ([]Interface, error) {
