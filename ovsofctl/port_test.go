@@ -8,7 +8,7 @@ import (
 
 
 func TestGetPort(t *testing.T) {
-	testPortInfo, err := utils.ReadTestData("port")
+	testPortInfo, err := utils.ReadTestDataToString("port")
 	if err != nil {
 		t.Error(err)
 	}

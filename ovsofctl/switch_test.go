@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetSwitch(t *testing.T) {
-	testSwitchInfo, err := utils.ReadTestData("switch")
+	testSwitchInfo, err := utils.ReadTestDataToString("switch")
 	if err != nil {
 		t.Error(err)
 	}

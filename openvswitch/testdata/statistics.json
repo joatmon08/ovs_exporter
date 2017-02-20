@@ -1,0 +1,963 @@
+[
+  {
+    "_uuid": [
+      "uuid",
+      "e3c7171d-6b71-48a8-8194-556a9edf7105"
+    ],
+    "_version": [
+      "uuid",
+      "d9f95259-5795-43f6-bd1e-dae792bab1b8"
+    ],
+    "admin_state": [
+      "set",
+      []
+    ],
+    "bfd": [
+      "map",
+      []
+    ],
+    "bfd_status": [
+      "map",
+      []
+    ],
+    "cfm_fault": [
+      "set",
+      []
+    ],
+    "cfm_fault_status": [
+      "set",
+      []
+    ],
+    "cfm_flap_count": [
+      "set",
+      []
+    ],
+    "cfm_health": [
+      "set",
+      []
+    ],
+    "cfm_mpid": [
+      "set",
+      []
+    ],
+    "cfm_remote_mpids": [
+      "set",
+      []
+    ],
+    "cfm_remote_opstate": [
+      "set",
+      []
+    ],
+    "duplex": [
+      "set",
+      []
+    ],
+    "error": "could not open network device veth_hostc0 (No such device)",
+    "external_ids": [
+      "map",
+      []
+    ],
+    "ifindex": [
+      "set",
+      []
+    ],
+    "ingress_policing_burst": 0,
+    "ingress_policing_rate": 0,
+    "lacp_current": [
+      "set",
+      []
+    ],
+    "link_resets": [
+      "set",
+      []
+    ],
+    "link_speed": [
+      "set",
+      []
+    ],
+    "link_state": [
+      "set",
+      []
+    ],
+    "lldp": [
+      "map",
+      []
+    ],
+    "mac": [
+      "set",
+      []
+    ],
+    "mac_in_use": [
+      "set",
+      []
+    ],
+    "mtu": [
+      "set",
+      []
+    ],
+    "name": "veth_hostc0",
+    "ofport": -1,
+    "ofport_request": [
+      "set",
+      []
+    ],
+    "options": [
+      "map",
+      []
+    ],
+    "other_config": [
+      "map",
+      []
+    ],
+    "statistics": [
+      "map",
+      []
+    ],
+    "status": [
+      "map",
+      []
+    ],
+    "type": ""
+  },
+  {
+    "_uuid": [
+      "uuid",
+      "8f8ea200-d038-40c6-abfa-3a464504a800"
+    ],
+    "_version": [
+      "uuid",
+      "754d8a28-7ad1-43c4-8631-935b2e6808c6"
+    ],
+    "admin_state": "up",
+    "bfd": [
+      "map",
+      []
+    ],
+    "bfd_status": [
+      "map",
+      []
+    ],
+    "cfm_fault": [
+      "set",
+      []
+    ],
+    "cfm_fault_status": [
+      "set",
+      []
+    ],
+    "cfm_flap_count": [
+      "set",
+      []
+    ],
+    "cfm_health": [
+      "set",
+      []
+    ],
+    "cfm_mpid": [
+      "set",
+      []
+    ],
+    "cfm_remote_mpids": [
+      "set",
+      []
+    ],
+    "cfm_remote_opstate": [
+      "set",
+      []
+    ],
+    "duplex": [
+      "set",
+      []
+    ],
+    "error": [
+      "set",
+      []
+    ],
+    "external_ids": [
+      "map",
+      []
+    ],
+    "ifindex": 11,
+    "ingress_policing_burst": 0,
+    "ingress_policing_rate": 0,
+    "lacp_current": [
+      "set",
+      []
+    ],
+    "link_resets": 0,
+    "link_speed": [
+      "set",
+      []
+    ],
+    "link_state": "up",
+    "lldp": [
+      "map",
+      []
+    ],
+    "mac": [
+      "set",
+      []
+    ],
+    "mac_in_use": "d2:db:a4:77:17:4d",
+    "mtu": 1500,
+    "name": "ovsbr0",
+    "ofport": 65534,
+    "ofport_request": [
+      "set",
+      []
+    ],
+    "options": [
+      "map",
+      []
+    ],
+    "other_config": [
+      "map",
+      []
+    ],
+    "statistics": [
+      "map",
+      [
+        [
+          "collisions",
+          0
+        ],
+        [
+          "rx_bytes",
+          0
+        ],
+        [
+          "rx_crc_err",
+          0
+        ],
+        [
+          "rx_dropped",
+          0
+        ],
+        [
+          "rx_errors",
+          0
+        ],
+        [
+          "rx_frame_err",
+          0
+        ],
+        [
+          "rx_over_err",
+          0
+        ],
+        [
+          "rx_packets",
+          0
+        ],
+        [
+          "tx_bytes",
+          648
+        ],
+        [
+          "tx_dropped",
+          0
+        ],
+        [
+          "tx_errors",
+          0
+        ],
+        [
+          "tx_packets",
+          8
+        ]
+      ]
+    ],
+    "status": [
+      "map",
+      [
+        [
+          "driver_name",
+          "openvswitch"
+        ],
+        [
+          "driver_version",
+          ""
+        ],
+        [
+          "firmware_version",
+          ""
+        ]
+      ]
+    ],
+    "type": "internal"
+  },
+  {
+    "_uuid": [
+      "uuid",
+      "f0c2648e-88b6-411e-bc96-92f1be4637e6"
+    ],
+    "_version": [
+      "uuid",
+      "3c7898ee-4491-4645-be8d-28e544a3ee14"
+    ],
+    "admin_state": "up",
+    "bfd": [
+      "map",
+      []
+    ],
+    "bfd_status": [
+      "map",
+      []
+    ],
+    "cfm_fault": [
+      "set",
+      []
+    ],
+    "cfm_fault_status": [
+      "set",
+      []
+    ],
+    "cfm_flap_count": [
+      "set",
+      []
+    ],
+    "cfm_health": [
+      "set",
+      []
+    ],
+    "cfm_mpid": [
+      "set",
+      []
+    ],
+    "cfm_remote_mpids": [
+      "set",
+      []
+    ],
+    "cfm_remote_opstate": [
+      "set",
+      []
+    ],
+    "duplex": [
+      "set",
+      []
+    ],
+    "error": [
+      "set",
+      []
+    ],
+    "external_ids": [
+      "map",
+      []
+    ],
+    "ifindex": 10,
+    "ingress_policing_burst": 0,
+    "ingress_policing_rate": 0,
+    "lacp_current": [
+      "set",
+      []
+    ],
+    "link_resets": 0,
+    "link_speed": [
+      "set",
+      []
+    ],
+    "link_state": "up",
+    "lldp": [
+      "map",
+      []
+    ],
+    "mac": [
+      "set",
+      []
+    ],
+    "mac_in_use": "0a:ca:ab:a8:fe:40",
+    "mtu": 1500,
+    "name": "ovs-br2",
+    "ofport": 65534,
+    "ofport_request": [
+      "set",
+      []
+    ],
+    "options": [
+      "map",
+      []
+    ],
+    "other_config": [
+      "map",
+      []
+    ],
+    "statistics": [
+      "map",
+      [
+        [
+          "collisions",
+          0
+        ],
+        [
+          "rx_bytes",
+          0
+        ],
+        [
+          "rx_crc_err",
+          0
+        ],
+        [
+          "rx_dropped",
+          0
+        ],
+        [
+          "rx_errors",
+          0
+        ],
+        [
+          "rx_frame_err",
+          0
+        ],
+        [
+          "rx_over_err",
+          0
+        ],
+        [
+          "rx_packets",
+          0
+        ],
+        [
+          "tx_bytes",
+          648
+        ],
+        [
+          "tx_dropped",
+          0
+        ],
+        [
+          "tx_errors",
+          0
+        ],
+        [
+          "tx_packets",
+          8
+        ]
+      ]
+    ],
+    "status": [
+      "map",
+      [
+        [
+          "driver_name",
+          "openvswitch"
+        ],
+        [
+          "driver_version",
+          ""
+        ],
+        [
+          "firmware_version",
+          ""
+        ]
+      ]
+    ],
+    "type": "internal"
+  },
+  {
+    "_uuid": [
+      "uuid",
+      "aa713415-8566-458b-b8ef-58e550af8a91"
+    ],
+    "_version": [
+      "uuid",
+      "3b67d297-f80e-4753-9c2d-fdc0b18f5a54"
+    ],
+    "admin_state": "up",
+    "bfd": [
+      "map",
+      []
+    ],
+    "bfd_status": [
+      "map",
+      []
+    ],
+    "cfm_fault": [
+      "set",
+      []
+    ],
+    "cfm_fault_status": [
+      "set",
+      []
+    ],
+    "cfm_flap_count": [
+      "set",
+      []
+    ],
+    "cfm_health": [
+      "set",
+      []
+    ],
+    "cfm_mpid": [
+      "set",
+      []
+    ],
+    "cfm_remote_mpids": [
+      "set",
+      []
+    ],
+    "cfm_remote_opstate": [
+      "set",
+      []
+    ],
+    "duplex": "full",
+    "error": [
+      "set",
+      []
+    ],
+    "external_ids": [
+      "map",
+      [
+        [
+          "container_id",
+          "container2"
+        ],
+        [
+          "container_iface",
+          "eth0"
+        ]
+      ]
+    ],
+    "ifindex": 9,
+    "ingress_policing_burst": 0,
+    "ingress_policing_rate": 0,
+    "lacp_current": [
+      "set",
+      []
+    ],
+    "link_resets": 0,
+    "link_speed": 10000000000,
+    "link_state": "up",
+    "lldp": [
+      "map",
+      []
+    ],
+    "mac": [
+      "set",
+      []
+    ],
+    "mac_in_use": "a2:c1:a6:7a:f5:80",
+    "mtu": 1500,
+    "name": "1c1988eb903b4_l",
+    "ofport": 2,
+    "ofport_request": [
+      "set",
+      []
+    ],
+    "options": [
+      "map",
+      []
+    ],
+    "other_config": [
+      "map",
+      []
+    ],
+    "statistics": [
+      "map",
+      [
+        [
+          "collisions",
+          0
+        ],
+        [
+          "rx_bytes",
+          1026
+        ],
+        [
+          "rx_crc_err",
+          0
+        ],
+        [
+          "rx_dropped",
+          0
+        ],
+        [
+          "rx_errors",
+          0
+        ],
+        [
+          "rx_frame_err",
+          0
+        ],
+        [
+          "rx_over_err",
+          0
+        ],
+        [
+          "rx_packets",
+          13
+        ],
+        [
+          "tx_bytes",
+          1096
+        ],
+        [
+          "tx_dropped",
+          0
+        ],
+        [
+          "tx_errors",
+          0
+        ],
+        [
+          "tx_packets",
+          14
+        ]
+      ]
+    ],
+    "status": [
+      "map",
+      [
+        [
+          "driver_name",
+          "veth"
+        ],
+        [
+          "driver_version",
+          "1.0"
+        ],
+        [
+          "firmware_version",
+          ""
+        ]
+      ]
+    ],
+    "type": ""
+  },
+  {
+    "_uuid": [
+      "uuid",
+      "b225fd50-af9b-44f9-adf4-580c9800f46c"
+    ],
+    "_version": [
+      "uuid",
+      "232edc24-4195-4a4d-8806-fd2379e4a302"
+    ],
+    "admin_state": "up",
+    "bfd": [
+      "map",
+      []
+    ],
+    "bfd_status": [
+      "map",
+      []
+    ],
+    "cfm_fault": [
+      "set",
+      []
+    ],
+    "cfm_fault_status": [
+      "set",
+      []
+    ],
+    "cfm_flap_count": [
+      "set",
+      []
+    ],
+    "cfm_health": [
+      "set",
+      []
+    ],
+    "cfm_mpid": [
+      "set",
+      []
+    ],
+    "cfm_remote_mpids": [
+      "set",
+      []
+    ],
+    "cfm_remote_opstate": [
+      "set",
+      []
+    ],
+    "duplex": "full",
+    "error": [
+      "set",
+      []
+    ],
+    "external_ids": [
+      "map",
+      [
+        [
+          "container_id",
+          "container1"
+        ],
+        [
+          "container_iface",
+          "eth0"
+        ]
+      ]
+    ],
+    "ifindex": 7,
+    "ingress_policing_burst": 0,
+    "ingress_policing_rate": 0,
+    "lacp_current": [
+      "set",
+      []
+    ],
+    "link_resets": 0,
+    "link_speed": 10000000000,
+    "link_state": "up",
+    "lldp": [
+      "map",
+      []
+    ],
+    "mac": [
+      "set",
+      []
+    ],
+    "mac_in_use": "d2:e5:b4:c9:e9:86",
+    "mtu": 1500,
+    "name": "87be70c563b24_l",
+    "ofport": 1,
+    "ofport_request": [
+      "set",
+      []
+    ],
+    "options": [
+      "map",
+      []
+    ],
+    "other_config": [
+      "map",
+      []
+    ],
+    "statistics": [
+      "map",
+      [
+        [
+          "collisions",
+          0
+        ],
+        [
+          "rx_bytes",
+          1026
+        ],
+        [
+          "rx_crc_err",
+          0
+        ],
+        [
+          "rx_dropped",
+          0
+        ],
+        [
+          "rx_errors",
+          0
+        ],
+        [
+          "rx_frame_err",
+          0
+        ],
+        [
+          "rx_over_err",
+          0
+        ],
+        [
+          "rx_packets",
+          13
+        ],
+        [
+          "tx_bytes",
+          1674
+        ],
+        [
+          "tx_dropped",
+          0
+        ],
+        [
+          "tx_errors",
+          0
+        ],
+        [
+          "tx_packets",
+          21
+        ]
+      ]
+    ],
+    "status": [
+      "map",
+      [
+        [
+          "driver_name",
+          "veth"
+        ],
+        [
+          "driver_version",
+          "1.0"
+        ],
+        [
+          "firmware_version",
+          ""
+        ]
+      ]
+    ],
+    "type": ""
+  },
+  {
+    "_uuid": [
+      "uuid",
+      "3ce18e8e-184d-4c45-8398-00b28c388c10"
+    ],
+    "_version": [
+      "uuid",
+      "ac36d3d8-ce12-4ce6-9072-184c537cd042"
+    ],
+    "admin_state": "up",
+    "bfd": [
+      "map",
+      []
+    ],
+    "bfd_status": [
+      "map",
+      []
+    ],
+    "cfm_fault": [
+      "set",
+      []
+    ],
+    "cfm_fault_status": [
+      "set",
+      []
+    ],
+    "cfm_flap_count": [
+      "set",
+      []
+    ],
+    "cfm_health": [
+      "set",
+      []
+    ],
+    "cfm_mpid": [
+      "set",
+      []
+    ],
+    "cfm_remote_mpids": [
+      "set",
+      []
+    ],
+    "cfm_remote_opstate": [
+      "set",
+      []
+    ],
+    "duplex": [
+      "set",
+      []
+    ],
+    "error": [
+      "set",
+      []
+    ],
+    "external_ids": [
+      "map",
+      []
+    ],
+    "ifindex": 5,
+    "ingress_policing_burst": 0,
+    "ingress_policing_rate": 0,
+    "lacp_current": [
+      "set",
+      []
+    ],
+    "link_resets": 0,
+    "link_speed": [
+      "set",
+      []
+    ],
+    "link_state": "up",
+    "lldp": [
+      "map",
+      []
+    ],
+    "mac": [
+      "set",
+      []
+    ],
+    "mac_in_use": "02:ab:c7:77:71:40",
+    "mtu": 1500,
+    "name": "ovs-br1",
+    "ofport": 65534,
+    "ofport_request": [
+      "set",
+      []
+    ],
+    "options": [
+      "map",
+      []
+    ],
+    "other_config": [
+      "map",
+      []
+    ],
+    "statistics": [
+      "map",
+      [
+        [
+          "collisions",
+          0
+        ],
+        [
+          "rx_bytes",
+          1100
+        ],
+        [
+          "rx_crc_err",
+          0
+        ],
+        [
+          "rx_dropped",
+          0
+        ],
+        [
+          "rx_errors",
+          0
+        ],
+        [
+          "rx_frame_err",
+          0
+        ],
+        [
+          "rx_over_err",
+          0
+        ],
+        [
+          "rx_packets",
+          17
+        ],
+        [
+          "tx_bytes",
+          648
+        ],
+        [
+          "tx_dropped",
+          0
+        ],
+        [
+          "tx_errors",
+          0
+        ],
+        [
+          "tx_packets",
+          8
+        ]
+      ]
+    ],
+    "status": [
+      "map",
+      [
+        [
+          "driver_name",
+          "openvswitch"
+        ],
+        [
+          "driver_version",
+          ""
+        ],
+        [
+          "firmware_version",
+          ""
+        ]
+      ]
+    ],
+    "type": "internal"
+  }
+]
