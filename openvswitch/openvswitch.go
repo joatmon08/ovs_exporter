@@ -4,6 +4,7 @@ import (
 	"github.com/socketplane/libovsdb"
 	"github.com/Sirupsen/logrus"
 	"errors"
+	"strings"
 )
 
 const STATISTICS = "statistics"
@@ -88,7 +89,9 @@ func GetRowsFromTable(o *libovsdb.OvsdbClient, table string) []map[string]interf
 		Where:     []interface{}{},
 	}}
 	reply, _ := o.Transact("Open_vSwitch", op...)
-	logrus.Debugf("%v, Reply from OVSDB, %v", op, reply)
+	if strings.Contains(reply[0].Error, "error") {
+		logrus.Errorf("%v : reply from OVSDB : %v", op, reply)
+	}
 	for _, r := range reply {
 		return r.Rows
 	}
