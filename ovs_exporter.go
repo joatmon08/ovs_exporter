@@ -36,16 +36,21 @@ var (
 		"How many Open vSwitch interfaces on this node.",
 		nil, nil,
 	)
+	ports = prometheus.NewDesc(
+		prometheus.BuildFQName(namespace, "", "ports_total"),
+		"How many Open vSwitch ports on this node.",
+		nil, nil,
+	)
 	bridges_num_ports = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: namespace,
-		Name:      "bridges_num_ports",
+		Name:      "bridges_ports",
 		Help:      "Number of ports attached to bridges",
 	},
 		[]string{"name"},
 	)
 	interfaces_stats = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Namespace: namespace,
-		Name:      "interfaces",
+		Name:      "interfaces_statistics",
 		Help:      "Open vSwitch interface statistics",
 	},
 		[]string{"name", "stat"},
@@ -53,14 +58,15 @@ var (
 )
 
 type Exporter struct {
-	URI              string
-	client           *libovsdb.OvsdbClient
-	up               *prometheus.Desc
-	dbs              *prometheus.Desc
-	bridges          *prometheus.Desc
-	interfaces       *prometheus.Desc
-	bridges_num_ports    *prometheus.GaugeVec
-	interfaces_stats *prometheus.CounterVec
+	URI               string
+	client            *libovsdb.OvsdbClient
+	up                *prometheus.Desc
+	dbs               *prometheus.Desc
+	bridges           *prometheus.Desc
+	ports             *prometheus.Desc
+	interfaces        *prometheus.Desc
+	bridges_num_ports *prometheus.GaugeVec
+	interfaces_stats  *prometheus.CounterVec
 }
 
 func NewExporter(uri string) (*Exporter, error) {
@@ -85,6 +91,7 @@ func NewExporter(uri string) (*Exporter, error) {
 		dbs: dbs,
 		client: client,
 		bridges: bridges,
+		ports: ports,
 		interfaces: interfaces,
 		bridges_num_ports: bridges_num_ports,
 		interfaces_stats: interfaces_stats,
@@ -95,6 +102,7 @@ func (e *Exporter) Describe(ch chan <- *prometheus.Desc) {
 	ch <- up
 	ch <- dbs
 	ch <- bridges
+	ch <- ports
 	ch <- interfaces
 	e.bridges_num_ports.Describe(ch)
 	e.interfaces_stats.Describe(ch)
@@ -143,6 +151,10 @@ func (e *Exporter) Collect(ch chan <- prometheus.Metric) {
 	total_bridges := openvswitch.GetRowsFromTable(e.client, "Bridge")
 	ch <- prometheus.MustNewConstMetric(
 		bridges, prometheus.GaugeValue, float64(len(total_bridges)),
+	)
+	total_ports := openvswitch.GetRowsFromTable(e.client, "Port")
+	ch <- prometheus.MustNewConstMetric(
+		ports, prometheus.GaugeValue, float64(len(total_ports)),
 	)
 	total_interfaces := openvswitch.GetRowsFromTable(e.client, "Interface")
 	ch <- prometheus.MustNewConstMetric(
