@@ -36,23 +36,23 @@ var (
 		"How many Open vSwitch interfaces on this node.",
 		nil, nil,
 	)
-	interfaces_stats = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	interfaces_stats = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Namespace: namespace,
 		Name:      "interfaces",
 		Help:      "Open vSwitch interface statistics",
 	},
-		[]string{"stat"},
+		[]string{"name", "stat"},
 	)
 )
 
 type Exporter struct {
-	URI            string
-	client         *libovsdb.OvsdbClient
-	up             *prometheus.Desc
-	dbs            *prometheus.Desc
-	bridges        *prometheus.Desc
-	interfaces     *prometheus.Desc
-	interfaces_stats *prometheus.GaugeVec
+	URI              string
+	client           *libovsdb.OvsdbClient
+	up               *prometheus.Desc
+	dbs              *prometheus.Desc
+	bridges          *prometheus.Desc
+	interfaces       *prometheus.Desc
+	interfaces_stats *prometheus.CounterVec
 }
 
 func NewExporter(uri string) (*Exporter, error) {
@@ -93,12 +93,14 @@ func (e *Exporter) Describe(ch chan <- *prometheus.Desc) {
 func (e *Exporter) collectInterfacesStats(rows []map[string]interface{}) {
 	e.interfaces_stats.Reset()
 	interfaces, err := openvswitch.ParseStatisticsFromData(rows)
-	if err != nil {{
-		return
-	}}
+	if err != nil {
+		{
+			return
+		}
+	}
 	for name, statistics := range interfaces {
 		for stat_name, num := range statistics {
-			e.interfaces_stats.WithLabelValues(name + "_" + stat_name).Set(num)
+			e.interfaces_stats.WithLabelValues(name, stat_name).Add(num)
 		}
 	}
 }
