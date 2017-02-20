@@ -7,8 +7,6 @@ import (
 	"github.com/Sirupsen/logrus"
 	"net/http"
 	"github.com/joatmon08/ovs_exporter/openvswitch"
-	"strings"
-	"strconv"
 )
 
 const (
@@ -70,26 +68,11 @@ type Exporter struct {
 }
 
 func NewExporter(uri string) (*Exporter, error) {
-	var client *libovsdb.OvsdbClient
-	var err error
-	if strings.Contains(uri, ":") {
-		ip := strings.Split(uri, ":")
-		port, err := strconv.Atoi(ip[1])
-		if err != nil {
-			port = 6640
-		}
-		client, err = libovsdb.Connect(ip[0], port)
-	} else {
-		client, err = libovsdb.ConnectWithUnixSocket(uri)
-	}
-	if err != nil {
-		return nil, err
-	}
 	return &Exporter{
 		URI: uri,
 		up: up,
 		dbs: dbs,
-		client: client,
+		client: &libovsdb.OvsdbClient{},
 		bridges: bridges,
 		ports: ports,
 		interfaces: interfaces,
@@ -133,18 +116,37 @@ func (e *Exporter) collectInterfacesStats(rows []map[string]interface{}) {
 	}
 }
 
+func (e *Exporter) connect(network string) error {
+	network, err := openvswitch.GenerateNetworkAndHealthCheck(e.URI)
+	e.client, err = libovsdb.ConnectUsingProtocol(network, e.URI)
+	return err
+}
+
 func (e *Exporter) Collect(ch chan <- prometheus.Metric) {
+	if err := e.connect("tcp"); err != nil {
+		logrus.WithFields(logrus.Fields{
+			"event": "cannot connect to ovsdb",
+		}).Error(err)
+		ch <- prometheus.MustNewConstMetric(
+			up, prometheus.GaugeValue, 0,
+		)
+		return
+	}
+
 	databases, err := openvswitch.CheckHealth(e.client)
 	if err != nil {
 		ch <- prometheus.MustNewConstMetric(
 			up, prometheus.GaugeValue, 0,
 		)
-		logrus.Errorf("Query error is %v", err)
+		logrus.WithFields(logrus.Fields{
+			"event": "cannot get dbs from ovs",
+		}).Error("ovsdb connection error")
 		return
 	}
 	ch <- prometheus.MustNewConstMetric(
 		up, prometheus.GaugeValue, 1,
 	)
+
 	ch <- prometheus.MustNewConstMetric(
 		dbs, prometheus.GaugeValue, float64(len(databases)),
 	)
@@ -164,6 +166,7 @@ func (e *Exporter) Collect(ch chan <- prometheus.Metric) {
 	e.bridges_num_ports.Collect(ch)
 	e.collectInterfacesStats(total_interfaces)
 	e.interfaces_stats.Collect(ch)
+	e.client.Disconnect()
 }
 
 
