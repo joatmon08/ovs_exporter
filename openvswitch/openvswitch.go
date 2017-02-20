@@ -53,6 +53,10 @@ func ParsePortsFromBridges(rows []map[string]interface{}) ([]Bridge, error) {
 		}
 		result = append(result, Bridge{Name:name, Ports:ports})
 	}
+	logrus.WithFields(logrus.Fields{
+		"event": "parsed ports from bridges",
+		"rows": len(result),
+	}).Info("retrieved bridge ports")
 	return result, nil
 }
 
@@ -78,6 +82,10 @@ func ParseStatisticsFromInterfaces(rows []map[string]interface{}) ([]Interface, 
 		}
 		result = append(result, iface)
 	}
+	logrus.WithFields(logrus.Fields{
+		"event": "parsed statistics from interfaces",
+		"rows": len(result),
+	}).Info("retrieved statistics")
 	return result, nil
 }
 
@@ -90,10 +98,19 @@ func GetRowsFromTable(o *libovsdb.OvsdbClient, table string) []map[string]interf
 	}}
 	reply, _ := o.Transact("Open_vSwitch", op...)
 	if strings.Contains(reply[0].Error, "error") {
-		logrus.Errorf("%v : reply from OVSDB : %v", op, reply)
+		logrus.WithFields(logrus.Fields{
+			"event": "ovsdb error",
+			"table": table,
+			"operation": op,
+		}).Error(reply[0].Error)
 	}
 	for _, r := range reply {
 		return r.Rows
 	}
+	logrus.WithFields(logrus.Fields{
+		"event": "ovsdb transact",
+		"table": table,
+		"rows": len(rows),
+	}).Info("retrieved ovsdb rows")
 	return rows
 }

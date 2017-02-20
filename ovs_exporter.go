@@ -166,6 +166,15 @@ func (e *Exporter) Collect(ch chan <- prometheus.Metric) {
 	e.interfaces_stats.Collect(ch)
 }
 
+
+func init() {
+	formatter := &logrus.TextFormatter{
+		FullTimestamp: true,
+	}
+	logrus.SetFormatter(formatter)
+	logrus.SetLevel(logrus.InfoLevel)
+}
+
 func main() {
 	var (
 		uri = flag.String("uri", "/var/run/openvswitch/db.sock", "URI to connect to Open vSwitch")
@@ -174,10 +183,12 @@ func main() {
 	)
 	flag.Parse()
 
-	logrus.SetLevel(logrus.DebugLevel)
 	exporter, err := NewExporter(*uri)
 	if err != nil {
-		logrus.Fatalln(err)
+		logrus.WithFields(logrus.Fields{
+			"uri": *uri,
+			"event": "starting exporter",
+		}).Fatal(err)
 	}
 	prometheus.MustRegister(exporter)
 
@@ -192,6 +203,15 @@ func main() {
              </html>`))
 	})
 
-	logrus.Infof("Listening on %s", *listenAddress)
-	logrus.Fatal(http.ListenAndServe(*listenAddress, nil))
+	logrus.WithFields(logrus.Fields{
+		"port": *listenAddress,
+		"path": *metricsPath,
+		"event": "listening",
+	}).Info("prometheus started")
+
+	logrus.WithFields(logrus.Fields{
+		"port": *listenAddress,
+		"path": *metricsPath,
+		"event": "web server error",
+	}).Fatal(http.ListenAndServe(*listenAddress, nil))
 }
