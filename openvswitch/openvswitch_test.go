@@ -1,39 +1,11 @@
 package openvswitch
 
 import (
-	"github.com/socketplane/libovsdb"
 	"testing"
 	"github.com/joatmon08/ovs_exporter/utils"
 	"encoding/json"
 	"reflect"
 )
-
-func setup(t *testing.T) *libovsdb.OvsdbClient {
-	client, err := libovsdb.Connect("127.0.0.1", 6640)
-	if err != nil {
-		t.Error(err)
-	}
-	return client
-}
-
-func TestCheckHealth(t *testing.T) {
-	client := setup(t)
-	dbs, err := GetDatabases(client)
-	if err != nil {
-		t.Error(err)
-	}
-	if len(dbs) != 1 {
-		t.Errorf("Expected %d, got %d", 1, len(dbs))
-	}
-}
-
-func TestGetTotalFromTable(t *testing.T) {
-	client := setup(t)
-	rows := GetRowsFromTable(client, "Bridge")
-	if len(rows) != 0 {
-		t.Errorf("Expected %d, got %d", 0, len(rows))
-	}
-}
 
 func TestParseStatisticsFromData(t *testing.T) {
 	var test []map[string]interface{}

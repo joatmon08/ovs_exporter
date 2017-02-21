@@ -15,7 +15,11 @@ func GenerateNetworkAndHealthCheck(uri string) (string, error) {
 
 	conn, err := net.Dial(network, uri)
 	if err != nil {
-		logrus.Errorf("Connection error:%s", err)
+		logrus.WithFields(logrus.Fields{
+			"uri": uri,
+			"network": network,
+			"event": "health check failed",
+		}).Error(err)
 		return network, err
 	}
 	defer conn.Close()

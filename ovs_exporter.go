@@ -116,25 +116,28 @@ func (e *Exporter) collectInterfacesStats(rows []map[string]interface{}) {
 	}
 }
 
-func (e *Exporter) connect(network string) error {
+func (e *Exporter) connect() error {
 	network, err := openvswitch.GenerateNetworkAndHealthCheck(e.URI)
 	if err != nil {
 		return err
 	}
 	e.client, err = libovsdb.ConnectUsingProtocol(network, e.URI)
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"event": "cannot connect to ovsdb",
+		}).Error(err)
+	}
 	return err
 }
 
 func (e *Exporter) Collect(ch chan <- prometheus.Metric) {
-	if err := e.connect("tcp"); err != nil {
-		logrus.WithFields(logrus.Fields{
-			"event": "cannot connect to ovsdb",
-		}).Error(err)
+	if err := e.connect(); err != nil {
 		ch <- prometheus.MustNewConstMetric(
 			up, prometheus.GaugeValue, 0,
 		)
 		return
 	}
+	defer e.client.Disconnect()
 	ch <- prometheus.MustNewConstMetric(
 		up, prometheus.GaugeValue, 1,
 	)
@@ -162,7 +165,6 @@ func (e *Exporter) Collect(ch chan <- prometheus.Metric) {
 	e.bridges_num_ports.Collect(ch)
 	e.collectInterfacesStats(total_interfaces)
 	e.interfaces_stats.Collect(ch)
-	e.client.Disconnect()
 }
 
 
