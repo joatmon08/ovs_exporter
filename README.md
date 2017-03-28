@@ -2,6 +2,8 @@
 
 A Prometheus exporter for Open vSwitch.
 
+![alt tag](https://circleci.com/gh/joatmon08/ovs_exporter.svg?style=shield&circle-token=034e618d2fb0a7c7e9fbecd1b6c64f0f443ad504)
+
 ## Getting Started
 
 ### Prerequisites
