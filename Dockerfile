@@ -1,9 +1,8 @@
-FROM golang:1.7
+FROM golang:1.7-onbuild
 
-COPY . /ovs_exporter
+COPY . /go/src/app
 
-RUN cd /ovs_exporter && go build ovs_exporter.go
+RUN go get -d -v
+RUN go install -v
 
-WORKDIR /ovs_exporter
-
-CMD ovs_exporter
+CMD app --help
