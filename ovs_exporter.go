@@ -179,7 +179,7 @@ func init() {
 func main() {
 	var (
 		uri = flag.String("uri", "/var/run/openvswitch/db.sock", "URI to connect to Open vSwitch")
-		listenAddress = flag.String("listen-port", ":9107", "Address to listen on for web interface and telemetry.")
+		listenAddress = flag.String("listen-port", ":9177", "Address to listen on for web interface and telemetry.")
 		metricsPath = flag.String("metrics-path", "/metrics", "Path under which to expose metrics.")
 	)
 	flag.Parse()

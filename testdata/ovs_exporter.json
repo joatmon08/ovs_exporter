@@ -1,0 +1,188 @@
+{
+  "Path": "/bin/sh",
+  "Args": [
+    "-c",
+    "app"
+  ],
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 11853,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2017-04-09T22:27:43.774668498Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Image": "sha256:9c9a0429cca73f366038c543b075cdf2d505274000db2a7fbbd105bc4f6c2d11",
+  "ResolvConfPath": "/var/lib/docker/containers/91e9226ed4c6cf4e34b652071d2c9f3e7de163ca113e22227b23c4f8d4644af1/resolv.conf",
+  "HostnamePath": "/var/lib/docker/containers/91e9226ed4c6cf4e34b652071d2c9f3e7de163ca113e22227b23c4f8d4644af1/hostname",
+  "HostsPath": "/var/lib/docker/containers/91e9226ed4c6cf4e34b652071d2c9f3e7de163ca113e22227b23c4f8d4644af1/hosts",
+  "LogPath": "/var/lib/docker/containers/91e9226ed4c6cf4e34b652071d2c9f3e7de163ca113e22227b23c4f8d4644af1/91e9226ed4c6cf4e34b652071d2c9f3e7de163ca113e22227b23c4f8d4644af1-json.log",
+  "Name": "/mystifying_kare",
+  "RestartCount": 0,
+  "Driver": "aufs",
+  "MountLabel": "",
+  "ProcessLabel": "",
+  "AppArmorProfile": "",
+  "ExecIDs": null,
+  "HostConfig": {
+    "Binds": null,
+    "ContainerIDFile": "",
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {}
+    },
+    "NetworkMode": "default",
+    "PortBindings": {
+      "9177/tcp": [
+        {
+          "HostIp": "",
+          "HostPort": "9177"
+        }
+      ]
+    },
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "AutoRemove": false,
+    "VolumeDriver": "",
+    "VolumesFrom": null,
+    "CapAdd": null,
+    "CapDrop": null,
+    "Dns": [],
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IpcMode": "",
+    "Cgroup": "",
+    "Links": null,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyRootfs": false,
+    "SecurityOpt": null,
+    "UTSMode": "",
+    "UsernsMode": "",
+    "ShmSize": 67108864,
+    "Runtime": "runc",
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "Isolation": "",
+    "CpuShares": 0,
+    "Memory": 0,
+    "NanoCpus": 0,
+    "CgroupParent": "",
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": null,
+    "BlkioDeviceReadBps": null,
+    "BlkioDeviceWriteBps": null,
+    "BlkioDeviceReadIOps": null,
+    "BlkioDeviceWriteIOps": null,
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpusetCpus": "",
+    "CpusetMems": "",
+    "Devices": [],
+    "DiskQuota": 0,
+    "KernelMemory": 0,
+    "MemoryReservation": 0,
+    "MemorySwap": 0,
+    "MemorySwappiness": -1,
+    "OomKillDisable": false,
+    "PidsLimit": 0,
+    "Ulimits": null,
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "IOMaximumIOps": 0,
+    "IOMaximumBandwidth": 0
+  },
+  "GraphDriver": {
+    "Name": "aufs",
+    "Data": null
+  },
+  "Mounts": [],
+  "Config": {
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "ExposedPorts": {
+      "9177/tcp": {}
+    },
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "PATH=/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "GOLANG_VERSION=1.7.5",
+      "GOLANG_DOWNLOAD_URL=https://golang.org/dl/go1.7.5.linux-amd64.tar.gz",
+      "GOLANG_DOWNLOAD_SHA256=2e4dd6c44f0693bef4e7b46cc701513d74c3cc44f2419bf519d7868b12931ac3",
+      "GOPATH=/go"
+    ],
+    "Cmd": [
+      "/bin/sh",
+      "-c",
+      "app -listen-port :9177 -uri 172.17.0.2:6640"
+    ],
+    "ArgsEscaped": true,
+    "Image": "joatmon08/ovs_exporter",
+    "Volumes": null,
+    "WorkingDir": "/go/src/app",
+    "Entrypoint": null,
+    "OnBuild": null,
+    "Labels": {}
+  },
+  "NetworkSettings": {
+    "Bridge": "",
+    "SandboxID": "1d46c010ab7f135ce6f91dc132791b7c907f6fc2f9f70f655c7d6da9e4ce32b4",
+    "HairpinMode": false,
+    "LinkLocalIPv6Address": "",
+    "LinkLocalIPv6PrefixLen": 0,
+    "Ports": {
+      "9177/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "9177"
+        }
+      ]
+    },
+    "SandboxKey": "/var/run/docker/netns/1d46c010ab7f",
+    "SecondaryIPAddresses": null,
+    "SecondaryIPv6Addresses": null,
+    "EndpointID": "d056969962e6a2fad6c6318f13d5c69d827dc50f5fbd147bf2b46acdc828203a",
+    "Gateway": "172.17.0.1",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "IPAddress": "172.17.0.3",
+    "IPPrefixLen": 16,
+    "IPv6Gateway": "",
+    "MacAddress": "02:42:ac:11:00:03",
+    "Networks": {
+      "bridge": {
+        "IPAMConfig": null,
+        "Links": null,
+        "Aliases": null,
+        "NetworkID": "aebcaf262befdc430455c69dbe7ff5e120b7d0e36f01a0876d06ccd4b04be706",
+        "EndpointID": "d056969962e6a2fad6c6318f13d5c69d827dc50f5fbd147bf2b46acdc828203a",
+        "Gateway": "172.17.0.1",
+        "IPAddress": "172.17.0.3",
+        "IPPrefixLen": 16,
+        "IPv6Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "MacAddress": "02:42:ac:11:00:03"
+      }
+    }
+  }
+}

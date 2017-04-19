@@ -1,0 +1,173 @@
+{
+  "Image": "sha256:ee8a615facc8ab6ffb2a63a9310b4d905779ef8f51fe44b2a244d7b652a525fe",
+  "ResolvConfPath": "/var/lib/docker/containers/c6f489e679aa60671cf4aed9e4c7291e5a1b70b7b3fee80b411053c1e4c76e34/resolv.conf",
+  "HostnamePath": "/var/lib/docker/containers/c6f489e679aa60671cf4aed9e4c7291e5a1b70b7b3fee80b411053c1e4c76e34/hostname",
+  "HostsPath": "/var/lib/docker/containers/c6f489e679aa60671cf4aed9e4c7291e5a1b70b7b3fee80b411053c1e4c76e34/hosts",
+  "LogPath": "/var/lib/docker/containers/c6f489e679aa60671cf4aed9e4c7291e5a1b70b7b3fee80b411053c1e4c76e34/c6f489e679aa60671cf4aed9e4c7291e5a1b70b7b3fee80b411053c1e4c76e34-json.log",
+  "Name": "/cranky_wiles",
+  "RestartCount": 0,
+  "Driver": "aufs",
+  "MountLabel": "",
+  "ProcessLabel": "",
+  "AppArmorProfile": "",
+  "ExecIDs": null,
+  "HostConfig": {
+    "Binds": null,
+    "ContainerIDFile": "",
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {}
+    },
+    "NetworkMode": "default",
+    "PortBindings": {
+      "6640/tcp": [
+        {
+          "HostIp": "",
+          "HostPort": "6640"
+        }
+      ]
+    },
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "AutoRemove": false,
+    "VolumeDriver": "",
+    "VolumesFrom": null,
+    "CapAdd": [
+      "NET_ADMIN"
+    ],
+    "CapDrop": null,
+    "Dns": [],
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IpcMode": "",
+    "Cgroup": "",
+    "Links": null,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyRootfs": false,
+    "SecurityOpt": null,
+    "UTSMode": "",
+    "UsernsMode": "",
+    "ShmSize": 67108864,
+    "Runtime": "runc",
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "Isolation": "",
+    "CpuShares": 0,
+    "Memory": 0,
+    "NanoCpus": 0,
+    "CgroupParent": "",
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": null,
+    "BlkioDeviceReadBps": null,
+    "BlkioDeviceWriteBps": null,
+    "BlkioDeviceReadIOps": null,
+    "BlkioDeviceWriteIOps": null,
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpusetCpus": "",
+    "CpusetMems": "",
+    "Devices": [
+      {
+        "PathOnHost": "/dev/net/tun",
+        "PathInContainer": "/dev/net/tun",
+        "CgroupPermissions": "rwm"
+      }
+    ],
+    "DiskQuota": 0,
+    "KernelMemory": 0,
+    "MemoryReservation": 0,
+    "MemorySwap": 0,
+    "MemorySwappiness": -1,
+    "OomKillDisable": false,
+    "PidsLimit": 0,
+    "Ulimits": null,
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "IOMaximumIOps": 0,
+    "IOMaximumBandwidth": 0
+  },
+  "GraphDriver": {
+    "Name": "aufs",
+    "Data": null
+  },
+  "Mounts": [],
+  "Config": {
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "ExposedPorts": {
+      "6640/tcp": {}
+    },
+    "Tty": true,
+    "OpenStdin": true,
+    "StdinOnce": false,
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "OVS_VERSION=2.4.0",
+      "SUPERVISOR_STDOUT_VERSION=0.1.1"
+    ],
+    "Cmd": [
+      "/usr/bin/supervisord"
+    ],
+    "Image": "socketplane/openvswitch",
+    "Volumes": null,
+    "WorkingDir": "/",
+    "Entrypoint": null,
+    "OnBuild": null,
+    "Labels": {}
+  },
+  "NetworkSettings": {
+    "Bridge": "",
+    "SandboxID": "f4544714134296f9d7cc8108aee01e89ef7db8b60e2176cd01047f4244de6db6",
+    "HairpinMode": false,
+    "LinkLocalIPv6Address": "",
+    "LinkLocalIPv6PrefixLen": 0,
+    "Ports": {
+      "6640/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "6640"
+        }
+      ]
+    },
+    "SandboxKey": "/var/run/docker/netns/f45447141342",
+    "SecondaryIPAddresses": null,
+    "SecondaryIPv6Addresses": null,
+    "EndpointID": "abbefb788f32df2fd461bd5fded4e4675fa490856f7eaadfb43dcc64e157ef7f",
+    "Gateway": "172.17.0.1",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "IPAddress": "172.17.0.2",
+    "IPPrefixLen": 16,
+    "IPv6Gateway": "",
+    "MacAddress": "02:42:ac:11:00:02",
+    "Networks": {
+      "bridge": {
+        "IPAMConfig": null,
+        "Links": null,
+        "Aliases": null,
+        "NetworkID": "aebcaf262befdc430455c69dbe7ff5e120b7d0e36f01a0876d06ccd4b04be706",
+        "EndpointID": "abbefb788f32df2fd461bd5fded4e4675fa490856f7eaadfb43dcc64e157ef7f",
+        "Gateway": "172.17.0.1",
+        "IPAddress": "172.17.0.2",
+        "IPPrefixLen": 16,
+        "IPv6Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "MacAddress": "02:42:ac:11:00:02"
+      }
+    }
+  }
+}
