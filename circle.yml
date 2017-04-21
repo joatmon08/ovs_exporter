@@ -1,6 +1,3 @@
 test:
   pre:
     - go vet ./...
-
-  override:
-    - go test ./... -short
