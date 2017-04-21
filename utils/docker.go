@@ -30,19 +30,13 @@ func DeleteContainer(id string) error {
 	if err != nil {
 		return err
 	}
-	logrus.Debugf("Stopping container %s", id)
-	err = client.StopContainer(id, 0)
-	if err != nil {
-		return err
-	}
 	options := dockerclient.RemoveContainerOptions{
 		ID: id,
 		RemoveVolumes: true,
 		Force: true,
 	}
 	logrus.Debugf("Removing container %s", id)
-	err = client.RemoveContainer(options)
-	if err != nil {
+	if err := client.RemoveContainer(options); err != nil {
 		return err
 	}
 	return nil
@@ -54,8 +48,7 @@ func StartContainer(id string) error {
 		return err
 	}
 	logrus.Debugf("Starting container %s", id)
-	err = client.StartContainer(id, nil)
-	if err != nil {
+	if err := client.StartContainer(id, nil); err != nil {
 		return err
 	}
 	return nil
@@ -67,8 +60,7 @@ func StopContainer(id string) error {
 		return err
 	}
 	logrus.Debugf("Stopping container %s", id)
-	err = client.StopContainer(id, 0)
-	if err != nil {
+	if err := client.StopContainer(id, 0); err != nil {
 		return err
 	}
 	return nil
@@ -103,7 +95,7 @@ func ExecuteContainer(containerID string, commands []string) (error) {
 		Tty: false,
 		Cmd: commands,
 	})
-	logrus.Infof("container %s, exec instance %s", containerID, execInstance.ID)
+	logrus.Debugf("container %s, exec instance %s", containerID, execInstance.ID)
 	if err != nil {
 		return err
 	}
@@ -114,7 +106,12 @@ func ExecuteContainer(containerID string, commands []string) (error) {
 		Tty: false,
 		RawTerminal: true,
 	})
-	if err != nil {
+	if err := client.StartExec(execInstance.ID, dockerclient.StartExecOptions{
+		OutputStream: &stdout,
+		Detach: false,
+		Tty: false,
+		RawTerminal: true,
+	}); err != nil {
 		return err
 	}
 	execResult, err := client.InspectExec(execInstance.ID)
