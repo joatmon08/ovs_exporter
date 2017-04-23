@@ -18,6 +18,23 @@ const (
 	SHELL = "/bin/sh"
 	COMMAND = "-c"
 	OVS_CONTAINER_IMAGE = "socketplane/openvswitch:latest"
+	OPENVSWITCH_JSON = "openvswitch"
+	EXPORTER_JSON = "ovs_exporter"
+	BRIDGE_ID = "br0"
+	PORT_ID = "eth0"
+	IP = "192.168.128.5"
+	OVS_STATE = "openvswitch_up"
+	OVS_INTERFACES = "openvswitch_interfaces_total"
+	OVS_PORTS = "openvswitch_ports_total"
+)
+
+var (
+	BridgeMetric = "openvswitch_interfaces_statistics{name=\"" + BRIDGE_ID + "\",stat=\"rx_bytes\"}"
+	AddBridge = "ovs-vsctl add-br " + BRIDGE_ID
+	SetDatapath = "ovs-vsctl set bridge " + BRIDGE_ID + " datapath_type=netdev"
+	AddPort = "ovs-vsctl add-port " + BRIDGE_ID + " " + PORT_ID
+	CreateBridge = AddBridge + " && " + SetDatapath + " && " + AddPort
+	ConfigureBridge = "ifconfig " + BRIDGE_ID + " " + IP
 )
 
 type testSetupObject struct {
@@ -32,7 +49,7 @@ func createContainers() (ovsContainerID string, ovsExporterContainerID string) {
 	//if err != nil {
 	//	panic(err)
 	//}
-	ovsContainerID, err = utils.CreateContainer("openvswitch")
+	ovsContainerID, err = utils.CreateContainer(OPENVSWITCH_JSON)
 	if err != nil {
 		panic(err)
 	}
@@ -41,7 +58,7 @@ func createContainers() (ovsContainerID string, ovsExporterContainerID string) {
 		panic(err)
 	}
 	logrus.Debugf("created ovs container %s", ovsContainerID)
-	ovsExporterContainerID, err = utils.CreateContainer("ovs_exporter")
+	ovsExporterContainerID, err = utils.CreateContainer(EXPORTER_JSON)
 	if err != nil {
 		panic(err)
 	}

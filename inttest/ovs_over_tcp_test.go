@@ -6,28 +6,12 @@ import (
 	"strconv"
 )
 
-const (
-	BRIDGE_ID = "br0"
-	PORT_ID = "eth0"
-	IP = "192.168.128.5"
-	OVS_STATE = "openvswitch_up"
-)
-
-var (
-	bridge_metric = "openvswitch_interfaces_statistics{name=\"" + BRIDGE_ID + "\",stat=\"rx_bytes\"}"
-	add_bridge = "ovs-vsctl add-br " + BRIDGE_ID
-	set_datapath = "ovs-vsctl set bridge " + BRIDGE_ID + " datapath_type=netdev"
-	add_port = "ovs-vsctl add-port " + BRIDGE_ID + " " + PORT_ID
-	create_bridge = add_bridge + " && " + set_datapath + " && " + add_port
-	configure_bridge = "ifconfig " + BRIDGE_ID + " " + IP
-)
-
-func TestOpenvSwitchBridgeWithTraffic(t *testing.T) {
+func TestTCPOpenvSwitchBridgeWithTraffic(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test")
 	}
 	t.Logf("OVS Bridge %s should have traffic on it", BRIDGE_ID)
-	ovsCommand := create_bridge + " && " + configure_bridge
+	ovsCommand := CreateBridge + " && " + ConfigureBridge
 	setup := Setup(t, ovsCommand)
 	if err := RetrieveMetrics(setup); err != nil {
 		t.Error(err)
@@ -35,19 +19,25 @@ func TestOpenvSwitchBridgeWithTraffic(t *testing.T) {
 	if actual, _ := strconv.Atoi(setup.metrics[OVS_STATE]); actual != 1 {
 		t.Errorf("expected ovs state to be 1, actual %d", actual)
 	}
-	if actual, _ := strconv.Atoi(setup.metrics[bridge_metric]); actual == 0 {
+	if actual, _ := strconv.Atoi(setup.metrics[OVS_INTERFACES]); actual != 2 {
+		t.Errorf("expected ovs interfaces total to be 2, actual %d", actual)
+	}
+	if actual, _ := strconv.Atoi(setup.metrics[OVS_PORTS]); actual != 2 {
+		t.Errorf("expected ovs ports total to be 2, actual %d", actual)
+	}
+	if actual, _ := strconv.Atoi(setup.metrics[BridgeMetric]); actual == 0 {
 		t.Errorf("expected greater than 0, actual %d", actual)
 	}
-	t.Logf("metric %s has %s", bridge_metric, setup.metrics[bridge_metric])
+	t.Logf("metric %s has %s", BridgeMetric, setup.metrics[BridgeMetric])
 	Teardown(setup.ovsContainerID, setup.ovsExporterContainerID)
 }
 
-func TestOpenvSwitchBridgeWithoutTraffic(t *testing.T) {
+func TestTCPOpenvSwitchBridgeWithoutTraffic(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test")
 	}
 	t.Logf("OVS Bridge %s should not have traffic on it", BRIDGE_ID)
-	ovsCommand := create_bridge
+	ovsCommand := CreateBridge
 	setup := Setup(t, ovsCommand)
 	if err := RetrieveMetrics(setup); err != nil {
 		t.Error(err)
@@ -55,14 +45,41 @@ func TestOpenvSwitchBridgeWithoutTraffic(t *testing.T) {
 	if actual, _ := strconv.Atoi(setup.metrics[OVS_STATE]); actual != 1 {
 		t.Errorf("expected ovs state to be 1, actual %d", actual)
 	}
-	if actual, _ := strconv.Atoi(setup.metrics[bridge_metric]); actual != 0 {
+	if actual, _ := strconv.Atoi(setup.metrics[OVS_INTERFACES]); actual != 2 {
+		t.Errorf("expected ovs interfaces total to be 2, actual %d", actual)
+	}
+	if actual, _ := strconv.Atoi(setup.metrics[OVS_PORTS]); actual != 2 {
+		t.Errorf("expected ovs ports total to be 2, actual %d", actual)
+	}
+	if actual, _ := strconv.Atoi(setup.metrics[BridgeMetric]); actual != 0 {
 		t.Errorf("expected %d, actual %d", 0, actual)
 	}
-	t.Logf("metric %s is %s", bridge_metric, setup.metrics[bridge_metric])
+	t.Logf("metric %s is %s", BridgeMetric, setup.metrics[BridgeMetric])
 	Teardown(setup.ovsContainerID, setup.ovsExporterContainerID)
 }
 
-func TestOpenvSwitchDown(t *testing.T) {
+func TestTCPOpenvSwitchWithoutBridge(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test")
+	}
+	t.Log("OVS should not have a bridge or interfaces")
+	setup := Setup(t, "")
+	if err := RetrieveMetrics(setup); err != nil {
+		t.Error(err)
+	}
+	if actual, _ := strconv.Atoi(setup.metrics[OVS_STATE]); actual != 1 {
+		t.Errorf("expected ovs state to be 1, actual %d", actual)
+	}
+	if actual, _ := strconv.Atoi(setup.metrics[OVS_INTERFACES]); actual != 0 {
+		t.Errorf("expected ovs interfaces total to be 0, actual %d", actual)
+	}
+	if actual, _ := strconv.Atoi(setup.metrics[OVS_PORTS]); actual != 0 {
+		t.Errorf("expected ovs ports total to be 0, actual %d", actual)
+	}
+	Teardown(setup.ovsContainerID, setup.ovsExporterContainerID)
+}
+
+func TestTCPOpenvSwitchDown(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test")
 	}
