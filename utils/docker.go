@@ -106,7 +106,6 @@ func CreateContainer(description string, optionalArgs *OptionalContainerArgs) (s
 	if optionalArgs.HostBinds != nil {
 		containerOptions.HostConfig.Binds = optionalArgs.HostBinds
 	}
-	logrus.Infof("%s, %s", description, optionalArgs)
 	containerClient, err := dockerclient.NewClient(ENDPOINT)
 	if err != nil {
 		return "", err
