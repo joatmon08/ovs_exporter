@@ -6,10 +6,6 @@ import (
 	"time"
 	"errors"
 	"testing"
-	"github.com/docker/docker/client"
-	"io/ioutil"
-	"context"
-	"github.com/docker/docker/api/types"
 )
 
 const (
@@ -22,7 +18,6 @@ const (
 	OPENVSWITCH_IP = "172.19.0.2"
 	OPENVSWITCH_PORT = ":6640"
 	EXPORTER_PORT = ":9177"
-	OVS_CONTAINER_IMAGE = "socketplane/openvswitch:latest"
 	OPENVSWITCH_JSON = "openvswitch"
 	EXPORTER_JSON = "ovs_exporter"
 	BRIDGE_ID = "br0"
@@ -55,10 +50,6 @@ type testSetupObject struct {
 
 func createContainers(exporterCmd string) (ovsContainerID string, ovsExporterContainerID string) {
 	var err error
-	//err := pullOVSImage()
-	//if err != nil {
-	//	panic(err)
-	//}
 	ovsArgs := &utils.OptionalContainerArgs{
 		Network: INTTEST_NETWORK,
 	}
@@ -96,22 +87,6 @@ func createContainers(exporterCmd string) (ovsContainerID string, ovsExporterCon
 	logrus.Debugf("created ovs exporter container %s", ovsExporterContainerID)
 	time.Sleep(CREATE_WAIT_TIME)
 	return ovsContainerID, ovsExporterContainerID
-}
-
-func pullOVSImage() error {
-	dockerClient, err := client.NewEnvClient()
-	if err != nil {
-		logrus.Errorf("docker client was not created")
-		panic(err)
-	}
-	reader, err := dockerClient.ImagePull(context.Background(), OVS_CONTAINER_IMAGE, types.ImagePullOptions{})
-	_, err = ioutil.ReadAll(reader)
-	reader.Close()
-	if err != nil {
-		logrus.Errorf("ovs image was not pulled")
-		return err
-	}
-	return nil
 }
 
 func RetrieveMetrics(testSetup *testSetupObject) (error) {
