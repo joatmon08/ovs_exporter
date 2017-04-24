@@ -10,9 +10,19 @@ import (
 	"bytes"
 )
 
-const ENDPOINT = "unix:///var/run/docker.sock"
+const (
+	ENDPOINT = "unix:///var/run/docker.sock"
+	SHELL = "/bin/sh"
+	COMMAND_OPTION = "-c"
+)
 
-func ReadInContainerTemplate(name string) (dockerclient.CreateContainerOptions, error) {
+type OptionalContainerArgs struct {
+	Network   string
+	Cmd       string
+	HostBinds []string
+}
+
+func readInContainerTemplate(name string) (dockerclient.CreateContainerOptions, error) {
 	var container dockerclient.CreateContainerOptions
 	file, err := ioutil.ReadFile("testdata/" + name + ".json")
 	if err != nil {
@@ -25,8 +35,20 @@ func ReadInContainerTemplate(name string) (dockerclient.CreateContainerOptions, 
 	return container, nil
 }
 
+func readInNetworkTemplate(name string) (dockerclient.CreateNetworkOptions, error) {
+	var network dockerclient.CreateNetworkOptions
+	file, err := ioutil.ReadFile("testdata/" + name + ".json")
+	if err != nil {
+		return network, err
+	}
+	if err := json.Unmarshal(file, &network); err != nil {
+		return network, err
+	}
+	return network, nil
+}
+
 func DeleteContainer(id string) error {
-	client, err := dockerclient.NewClient(ENDPOINT)
+	containerClient, err := dockerclient.NewClient(ENDPOINT)
 	if err != nil {
 		return err
 	}
@@ -36,46 +58,60 @@ func DeleteContainer(id string) error {
 		Force: true,
 	}
 	logrus.Debugf("Removing container %s", id)
-	if err := client.RemoveContainer(options); err != nil {
+	if err := containerClient.RemoveContainer(options); err != nil {
 		return err
 	}
 	return nil
 }
 
 func StartContainer(id string) error {
-	client, err := dockerclient.NewClient(ENDPOINT)
+	containerClient, err := dockerclient.NewClient(ENDPOINT)
 	if err != nil {
 		return err
 	}
 	logrus.Debugf("Starting container %s", id)
-	if err := client.StartContainer(id, nil); err != nil {
+	if err := containerClient.StartContainer(id, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
 func StopContainer(id string) error {
-	client, err := dockerclient.NewClient(ENDPOINT)
+	containerClient, err := dockerclient.NewClient(ENDPOINT)
 	if err != nil {
 		return err
 	}
 	logrus.Debugf("Stopping container %s", id)
-	if err := client.StopContainer(id, 0); err != nil {
+	if err := containerClient.StopContainer(id, 0); err != nil {
 		return err
 	}
 	return nil
 }
 
-func CreateContainer(description string) (string, error) {
-	containerOptions, err := ReadInContainerTemplate(description)
+func CreateContainer(description string, optionalArgs *OptionalContainerArgs) (string, error) {
+	containerOptions, err := readInContainerTemplate(description)
 	if err != nil {
 		return "", err
 	}
-	client, err := dockerclient.NewClient(ENDPOINT)
+	if optionalArgs.Network != "" {
+		containerOptions.HostConfig.NetworkMode = optionalArgs.Network
+	}
+	if optionalArgs.Cmd != "" {
+		containerOptions.Config.Cmd = []string{
+			SHELL,
+			COMMAND_OPTION,
+			optionalArgs.Cmd,
+		}
+	}
+	if optionalArgs.HostBinds != nil {
+		containerOptions.HostConfig.Binds = optionalArgs.HostBinds
+	}
+	logrus.Infof("%s, %s", description, optionalArgs)
+	containerClient, err := dockerclient.NewClient(ENDPOINT)
 	if err != nil {
 		return "", err
 	}
-	container, err := client.CreateContainer(containerOptions)
+	container, err := containerClient.CreateContainer(containerOptions)
 	if err != nil {
 		return "", err
 	}
@@ -125,18 +161,37 @@ func ExecuteContainer(containerID string, commands []string) (error) {
 	return nil
 }
 
-func GetAllContainerIDs() ([]string, error) {
-	var containerIDs []string
+func CreateNetwork(description string, cidr string) (string, error) {
+	options, err := readInNetworkTemplate(description)
+	if err != nil {
+		return "", err
+	}
+	if cidr != "" {
+		options.IPAM.Config = []dockerclient.IPAMConfig{
+			{Subnet: cidr + "/16" },
+		}
+	}
 	client, err := dockerclient.NewClient(ENDPOINT)
 	if err != nil {
-		return containerIDs, err
+		return "", err
 	}
-	containers, err := client.ListContainers(dockerclient.ListContainersOptions{All: true})
+	logrus.Debugf("Creating network %s", options.Name)
+	network, err := client.CreateNetwork(options)
 	if err != nil {
-		return containerIDs, err
+		return "", err
 	}
-	for _, container := range containers {
-		containerIDs = append(containerIDs, container.ID)
+	return network.ID, nil
+}
+
+func DeleteNetwork(id string) error {
+	client, err := dockerclient.NewClient(ENDPOINT)
+	if err != nil {
+		return err
 	}
-	return containerIDs, nil
+	logrus.Debugf("Removing network %s", id)
+	err = client.RemoveNetwork(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }

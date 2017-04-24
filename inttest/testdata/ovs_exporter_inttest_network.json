@@ -1,0 +1,19 @@
+{
+  "Name": "ovs_exporter_inttest_network",
+  "Scope": "local",
+  "Driver": "bridge",
+  "EnableIPv6": false,
+  "IPAM": {
+    "Driver": "default",
+    "Options": {},
+    "Config": [
+      {
+        "Subnet": "172.19.0.0/16"
+      }
+    ]
+  },
+  "Internal": false,
+  "Containers": {},
+  "Options": {},
+  "Labels": {}
+}

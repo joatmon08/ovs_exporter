@@ -13,10 +13,15 @@ import (
 )
 
 const (
+	TCP = "tcp"
+	UNIX = "unix"
 	CREATE_WAIT_TIME = 2 * time.Second
 	EXEC_WAIT_TIME = 5 * time.Second
-	SHELL = "/bin/sh"
-	COMMAND = "-c"
+	INTTEST_NETWORK = "ovs_exporter_inttest_network"
+	INTTEST_NETWORK_CIDR = "172.19.0.0"
+	OPENVSWITCH_IP = "172.19.0.2"
+	OPENVSWITCH_PORT = ":6640"
+	EXPORTER_PORT = ":9177"
 	OVS_CONTAINER_IMAGE = "socketplane/openvswitch:latest"
 	OPENVSWITCH_JSON = "openvswitch"
 	EXPORTER_JSON = "ovs_exporter"
@@ -35,21 +40,34 @@ var (
 	AddPort = "ovs-vsctl add-port " + BRIDGE_ID + " " + PORT_ID
 	CreateBridge = AddBridge + " && " + SetDatapath + " && " + AddPort
 	ConfigureBridge = "ifconfig " + BRIDGE_ID + " " + IP
+	OVSUNIXCommand = "app -listen-port " + EXPORTER_PORT
+	OVSTCPCommand = OVSUNIXCommand + " -uri " + OPENVSWITCH_IP + OPENVSWITCH_PORT
 )
 
 type testSetupObject struct {
+	ovsConnectionMode      string
+	containerExecCmd       string
 	ovsContainerID         string
 	ovsExporterContainerID string
+	networkID              string
 	metrics                map[string]string
 }
 
-func createContainers() (ovsContainerID string, ovsExporterContainerID string) {
+func createContainers(exporterCmd string) (ovsContainerID string, ovsExporterContainerID string) {
 	var err error
 	//err := pullOVSImage()
 	//if err != nil {
 	//	panic(err)
 	//}
-	ovsContainerID, err = utils.CreateContainer(OPENVSWITCH_JSON)
+	ovsArgs := &utils.OptionalContainerArgs{
+		Network: INTTEST_NETWORK,
+	}
+	if exporterCmd == OVSUNIXCommand {
+		ovsArgs.HostBinds = []string{
+			"/tmp/openvswitch:/usr/local/var/run/openvswitch",
+		}
+	}
+	ovsContainerID, err = utils.CreateContainer(OPENVSWITCH_JSON, ovsArgs)
 	if err != nil {
 		panic(err)
 	}
@@ -58,7 +76,16 @@ func createContainers() (ovsContainerID string, ovsExporterContainerID string) {
 		panic(err)
 	}
 	logrus.Debugf("created ovs container %s", ovsContainerID)
-	ovsExporterContainerID, err = utils.CreateContainer(EXPORTER_JSON)
+	exporterArgs := &utils.OptionalContainerArgs{
+		Network: INTTEST_NETWORK,
+		Cmd: exporterCmd,
+	}
+	if exporterCmd == OVSUNIXCommand {
+		exporterArgs.HostBinds = []string{
+			"/tmp/openvswitch:/var/run/openvswitch",
+		}
+	}
+	ovsExporterContainerID, err = utils.CreateContainer(EXPORTER_JSON, exporterArgs)
 	if err != nil {
 		panic(err)
 	}
@@ -100,28 +127,43 @@ func RetrieveMetrics(testSetup *testSetupObject) (error) {
 	return nil
 }
 
-func Setup(t *testing.T, cmd string) (*testSetupObject) {
-	ovs, exporter := createContainers()
-	testSetup := testSetupObject{
-		ovsContainerID: ovs,
-		ovsExporterContainerID: exporter,
+func Setup(t *testing.T, testSetup *testSetupObject) (*testSetupObject) {
+	var ovsEntrypoint string
+	networkID, err := utils.CreateNetwork(INTTEST_NETWORK, INTTEST_NETWORK_CIDR)
+	if err != nil {
+		t.Error(err)
 	}
-	if cmd == "" {
-		return &testSetup
+	testSetup.networkID = networkID
+	switch connection := testSetup.ovsConnectionMode; connection {
+	case TCP:
+		ovsEntrypoint = OVSTCPCommand
+	case UNIX:
+		ovsEntrypoint = OVSUNIXCommand
+	default:
+		t.Error("Specify unix or tcp mode for OVS container")
 	}
-	commands := []string{SHELL, COMMAND, cmd}
+	ovs, exporter := createContainers(ovsEntrypoint)
+	testSetup.ovsExporterContainerID = exporter
+	testSetup.ovsContainerID = ovs
+	if testSetup.containerExecCmd == "" {
+		return testSetup
+	}
+	commands := []string{utils.SHELL, utils.COMMAND_OPTION, testSetup.containerExecCmd}
 	if err := utils.ExecuteContainer(ovs, commands); err != nil {
 		t.Error(err)
 	}
 	time.Sleep(EXEC_WAIT_TIME)
-	return &testSetup
+	return testSetup
 }
 
-func Teardown(ovsContainerID string, ovsExporterContainerID string) {
+func Teardown(ovsContainerID string, ovsExporterContainerID string, networkID string) {
 	if err := utils.DeleteContainer(ovsExporterContainerID); err != nil {
 		logrus.Error(err)
 	}
 	if err := utils.DeleteContainer(ovsContainerID); err != nil {
+		logrus.Error(err)
+	}
+	if err := utils.DeleteNetwork(networkID); err != nil {
 		logrus.Error(err)
 	}
 }

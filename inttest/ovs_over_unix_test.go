@@ -6,13 +6,13 @@ import (
 	"strconv"
 )
 
-func TestTCPOpenvSwitchBridgeWithTraffic(t *testing.T) {
+func TestUnixOpenvSwitchBridgeWithTraffic(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test")
 	}
-	t.Logf("TCP mode: OVS Bridge %s should have traffic on it", BRIDGE_ID)
+	t.Logf("UNIX mode: OVS Bridge %s should have traffic on it", BRIDGE_ID)
 	testSetupObj := &testSetupObject{
-		ovsConnectionMode: TCP,
+		ovsConnectionMode: UNIX,
 		containerExecCmd: CreateBridge + " && " + ConfigureBridge,
 	}
 	setup := Setup(t, testSetupObj)
@@ -35,13 +35,13 @@ func TestTCPOpenvSwitchBridgeWithTraffic(t *testing.T) {
 	Teardown(setup.ovsContainerID, setup.ovsExporterContainerID, setup.networkID)
 }
 
-func TestTCPOpenvSwitchBridgeWithoutTraffic(t *testing.T) {
+func TestUnixOpenvSwitchBridgeWithoutTraffic(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test")
 	}
-	t.Logf("TCP mode: OVS Bridge %s should not have traffic on it", BRIDGE_ID)
+	t.Logf("UNIX mode: OVS Bridge %s should not have traffic on it", BRIDGE_ID)
 	testSetupObj := &testSetupObject{
-		ovsConnectionMode: TCP,
+		ovsConnectionMode: UNIX,
 		containerExecCmd: CreateBridge,
 	}
 	setup := Setup(t, testSetupObj)
@@ -64,13 +64,13 @@ func TestTCPOpenvSwitchBridgeWithoutTraffic(t *testing.T) {
 	Teardown(setup.ovsContainerID, setup.ovsExporterContainerID, setup.networkID)
 }
 
-func TestTCPOpenvSwitchWithoutBridge(t *testing.T) {
+func TestUnixOpenvSwitchWithoutBridge(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test")
 	}
-	t.Log("TCP mode: OVS should not have a bridge or interfaces")
+	t.Log("UNIX mode: OVS should not have a bridge or interfaces")
 	testSetupObj := &testSetupObject{
-		ovsConnectionMode: TCP,
+		ovsConnectionMode: UNIX,
 	}
 	setup := Setup(t, testSetupObj)
 	if err := RetrieveMetrics(setup); err != nil {
@@ -88,13 +88,13 @@ func TestTCPOpenvSwitchWithoutBridge(t *testing.T) {
 	Teardown(setup.ovsContainerID, setup.ovsExporterContainerID, setup.networkID)
 }
 
-func TestTCPOpenvSwitchDown(t *testing.T) {
+func TestUnixOpenvSwitchDown(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test")
 	}
-	t.Log("TCP mode: OVS state should be down")
+	t.Log("UNIX mode: OVS state should be down")
 	testSetupObj := &testSetupObject{
-		ovsConnectionMode: TCP,
+		ovsConnectionMode: UNIX,
 	}
 	setup := Setup(t, testSetupObj)
 	if err := utils.StopContainer(setup.ovsContainerID); err != nil {
